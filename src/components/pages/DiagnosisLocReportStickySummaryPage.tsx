@@ -1,0 +1,51 @@
+import type { ActionPathItem, DiagnosisData } from '../types';
+import { mockDiagnosisData } from '../data/mockDiagnosisData';
+import { scrollToAnchor, STICKY_SUMMARY_SCROLL_OFFSET } from '../utils/scroll';
+import { cn } from '../utils/cn';
+import { ReportShell } from '../layout/ReportShell';
+import { TopBar } from '../layout/TopBar';
+import { SummaryHero } from '../summary/SummaryHero';
+import { StickySummaryBar } from '../summary/StickySummaryBar';
+import { LocNav, MobileLocNav } from '../navigation/LocNav';
+import { KpiCard } from '../ui/Cards';
+import { BarChart, ChartLegend } from '../ui/Charts';
+import { HelpBadge } from '../ui/Badges';
+import { DiagnosisDetailSections } from './ReportSections';
+
+export function DiagnosisLocReportStickySummaryPage({ data = mockDiagnosisData, className }: { data?: DiagnosisData; className?: string }) {
+  const navigate = (item: ActionPathItem) => scrollToAnchor(item.targetId, STICKY_SUMMARY_SCROLL_OFFSET);
+
+  return (
+    <ReportShell className={cn('max-w-[1180px]', className)}>
+      <TopBar />
+      <StickySummaryBar data={data} onNavigate={navigate} />
+      <MobileLocNav offset={STICKY_SUMMARY_SCROLL_OFFSET} />
+      <div className="grid bg-slate-50 lg:grid-cols-[220px_1fr]">
+        <LocNav offset={STICKY_SUMMARY_SCROLL_OFFSET} />
+
+        <main className="min-w-0">
+          <section id="summary-section" className="bg-white">
+            <SummaryHero data={data} rightLabel="LOC 요약 고정형" onNavigate={navigate} />
+            <div className="px-[30px] pb-8">
+              <div className="grid gap-3 lg:grid-cols-4">
+                {data.kpis.map((item) => (
+                  <KpiCard key={item.id} item={item} onClick={(targetId) => scrollToAnchor(targetId, STICKY_SUMMARY_SCROLL_OFFSET)} />
+                ))}
+              </div>
+              <div className="mt-5 rounded-[24px] border border-slate-200 bg-white p-6 shadow-card">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-black tracking-[-0.05em]">핵심 매출 추이</h2>
+                  <span className="inline-flex items-center gap-1 text-xs font-black text-slate-500">최근 6개월 <HelpBadge /></span>
+                </div>
+                <BarChart series={data.salesSeries} />
+                <ChartLegend first="매출액" second="증감률" />
+              </div>
+            </div>
+          </section>
+
+          <DiagnosisDetailSections data={data} />
+        </main>
+      </div>
+    </ReportShell>
+  );
+}
