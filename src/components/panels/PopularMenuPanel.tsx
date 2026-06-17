@@ -9,7 +9,7 @@ export function PopularMenuPanel({ data }: { data: DiagnosisData }) {
       <div className="mb-5 rounded-2xl bg-emerald-50 p-4 text-center text-sm font-extrabold leading-6 text-slate-700">
         <b className="text-emerald-600">돼지고기구이·갈비구이</b> 수요가 높습니다. 대표 메뉴, 세트 구성, 점심 메뉴에 활용해보세요.
       </div>
-      <div className="flex items-end justify-center gap-4 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex items-end justify-center gap-4 overflow-x-auto pb-2 pt-5 scrollbar-hide">
         {data.menuItems.map((item) => (
           <div key={item.rank} className={cn('relative min-w-[142px] rounded-[24px] border border-slate-100 bg-white p-4 text-center shadow-card', item.highlight && 'min-w-[180px] scale-105 bg-slate-50')}>
             <div className={cn('absolute -top-4 left-4 flex size-9 items-center justify-center rounded-full text-sm font-black text-white', item.highlight ? 'bg-amber-500' : 'bg-slate-400')}>{item.rank}위</div>
