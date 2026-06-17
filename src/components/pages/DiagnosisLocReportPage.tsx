@@ -23,7 +23,7 @@ export function DiagnosisLocReportPage({ data = mockDiagnosisData, className }: 
 
         <main className="min-w-0">
           <section id="summary-section" className="bg-white">
-            <SummaryHero data={data} rightLabel="LOC 기본형 · 요약 비고정" showActionPath onNavigate={navigate} />
+            <SummaryHero data={data} rightLabel="LOC 기본형 · 요약 비고정" onNavigate={navigate} />
             <div className="px-[30px] pb-8">
               <div className="grid gap-3 lg:grid-cols-4">
                 {data.kpis.map((item) => (

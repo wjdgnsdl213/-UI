@@ -1,19 +1,18 @@
-import { useState } from 'react';
 import type { ActionPathItem, DiagnosisData, TabKey } from '../types';
 import { scrollToAnchor } from '../utils/scroll';
-import { KpiCard } from '../ui/Cards';
-import { BarChart, ChartLegend } from '../ui/Charts';
+import { KpiCard, MetricRow } from '../ui/Cards';
+import { BarChart, ChartLegend, ScoreRing } from '../ui/Charts';
 import { StatusBadge } from '../ui/Badges';
+import { ActionPathLinks } from '../summary/ActionPathLinks';
 import { cn } from '../utils/cn';
 
 type OverviewPanelProps = {
   data: DiagnosisData;
+  onNavigate?: (item: ActionPathItem) => void;
   onShortcut?: (targetId: string, targetTab?: TabKey) => void;
 };
 
-export function OverviewPanel({ data, onShortcut }: OverviewPanelProps) {
-  const [showTrend, setShowTrend] = useState(false);
-
+export function OverviewPanel({ data, onNavigate, onShortcut }: OverviewPanelProps) {
   const handleKpiClick = (targetId: string) => {
     if (onShortcut) {
       onShortcut(targetId);
@@ -23,58 +22,55 @@ export function OverviewPanel({ data, onShortcut }: OverviewPanelProps) {
   };
 
   return (
-    <div className="grid gap-4">
-      <section className="grid gap-2 lg:grid-cols-4">
+    <div className="grid gap-5">
+      <section className="grid gap-3 lg:grid-cols-4">
         {data.kpis.map((item) => (
-          <KpiCard key={item.id} item={item} compact onClick={handleKpiClick} />
+          <KpiCard key={item.id} item={item} onClick={handleKpiClick} />
         ))}
       </section>
 
-      <section className="diagnosis-card p-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <section className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="diagnosis-card p-6">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-lg font-black tracking-[-0.05em]">매출 추이</h2>
+            <StatusBadge tone="info">최근 6개월</StatusBadge>
+          </div>
+          <BarChart series={data.salesSeries} height={185} />
+          <ChartLegend first="매출액" second="증감률" />
+        </div>
+        <div className="diagnosis-card p-6">
+          <h2 className="mb-4 text-lg font-black tracking-[-0.05em]">진단 기준</h2>
+          <ScoreRing score={72} />
+          <p className="mt-5 text-center text-sm font-bold leading-6 text-slate-600">전월 대비 회복 여부와 최근 6개월 평균 대비 수준을 분리해 판단합니다.</p>
+        </div>
+      </section>
+
+      <section className="diagnosis-card p-6">
+        <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-lg font-black tracking-[-0.05em]">진단 요약</h2>
-            <p className="mt-1 text-xs font-bold text-slate-500">{data.summary.basisNote}</p>
+            <h2 className="text-lg font-black tracking-[-0.05em]">우선 확인</h2>
+            <p className="mt-1 text-sm font-bold text-slate-500">각 항목을 누르면 해당 정보가 있는 위치로 이동합니다.</p>
           </div>
-          <button
-            type="button"
-            onClick={() => setShowTrend((value) => !value)}
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-600 transition hover:border-sky-300 hover:text-sky-600"
-          >
-            {showTrend ? '매출 추이 접기' : '매출 추이 보기'}
-          </button>
+          <ActionPathLinks items={data.summary.actionPath} onNavigate={onNavigate} />
         </div>
+      </section>
 
-        <div className="mt-3 grid gap-2 lg:grid-cols-4">
-          {data.categories.map((category) => (
-            <button
-              key={category.id}
-              type="button"
-              onClick={() => onShortcut?.('tab-content', category.id)}
-              className="rounded-lg border border-slate-100 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white hover:shadow-card focus:outline-none focus:ring-2 focus:ring-sky-300"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <b className="text-base font-black tracking-[-0.04em]">{category.label}</b>
-                <span className="flex size-9 items-center justify-center rounded-lg bg-sky-50 text-lg">{category.icon}</span>
-              </div>
-              <div className="mt-2">
-                <StatusBadge tone={category.tone}>{category.status}</StatusBadge>
-              </div>
-              <p className="mt-2 line-clamp-2 min-h-[40px] text-sm font-extrabold leading-5 text-slate-700">{category.headline}</p>
-            </button>
-          ))}
-        </div>
-
-        {showTrend ? (
-          <div className="mt-4 border-t border-slate-100 pt-4">
-            <div className="mb-2 flex items-center justify-between">
-              <h3 className="text-base font-black tracking-[-0.04em]">매출 추이</h3>
-              <StatusBadge tone="info">최근 6개월</StatusBadge>
+      <section className="grid gap-3 lg:grid-cols-4">
+        {data.categories.map((category) => (
+          <article key={category.id} className="diagnosis-card p-5">
+            <div className="mb-3 flex items-center justify-between">
+              <b className="text-base font-black tracking-[-0.05em]">{category.label}</b>
+              <span className="flex size-10 items-center justify-center rounded-2xl bg-sky-50 text-xl">{category.icon}</span>
             </div>
-            <BarChart series={data.salesSeries} height={160} />
-            <ChartLegend first="매출액" second="증감률" />
-          </div>
-        ) : null}
+            <StatusBadge tone={category.tone}>{category.status}</StatusBadge>
+            <p className="mt-3 line-clamp-3 text-sm font-bold leading-6 text-slate-600">{category.description}</p>
+            <div className="mt-2">
+              {category.metrics.slice(0, 2).map((item) => (
+                <MetricRow key={item.id} item={item} onClick={(targetId) => onShortcut?.(targetId, category.id)} />
+              ))}
+            </div>
+          </article>
+        ))}
       </section>
     </div>
   );
@@ -101,6 +97,7 @@ export function ActionList({ data, onNavigate }: { data: DiagnosisData; onNaviga
             <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-sky-500 text-xs font-black text-white">{index + 1}</span>
             <div>
               <div>{action.title}</div>
+              {action.description ? <p className="mt-1 text-xs font-semibold text-slate-500">{action.description}</p> : null}
             </div>
           </button>
         </li>

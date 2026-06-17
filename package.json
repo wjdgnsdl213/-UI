@@ -1,10 +1,12 @@
 {
   "name": "diagnosis-react-tailwind-v2-modular",
   "version": "2.0.0",
+  "description": "Business diagnosis report UI prototype built with React, TypeScript, Vite, and Tailwind CSS.",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "typecheck": "tsc -b",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

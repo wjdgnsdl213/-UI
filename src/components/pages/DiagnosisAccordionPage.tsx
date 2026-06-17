@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ActionPathItem, DiagnosisData, TabKey, Tone } from '../types';
+import type { ActionPathItem, DiagnosisData, Tone } from '../types';
 import { mockDiagnosisData } from '../data/mockDiagnosisData';
 import { cn } from '../utils/cn';
 import { scrollToAnchor } from '../utils/scroll';
@@ -8,7 +8,6 @@ import { TopBar } from '../layout/TopBar';
 import { SummaryHero } from '../summary/SummaryHero';
 import { KpiCard } from '../ui/Cards';
 import { StatusBadge } from '../ui/Badges';
-import { PriorityActionAside } from '../summary/PriorityActionAside';
 import { CategoryInsightPanel } from '../panels/CategoryInsightPanel';
 import { MarketSalesPanel } from '../panels/MarketSalesPanel';
 import { PopularMenuPanel } from '../panels/PopularMenuPanel';
@@ -23,13 +22,6 @@ type SectionDef = {
   tone: Tone;
   headline: string;
   renderContent: () => React.ReactElement;
-};
-
-const sectionIdByTab: Partial<Record<TabKey, string>> = {
-  market: 'market-sales',
-  menu: 'popular-menu-section',
-  sns: 'sns-keyword-section',
-  customer: 'customer-profile-section',
 };
 
 function ChevronIcon({ open }: { open: boolean }) {
@@ -49,6 +41,8 @@ function ChevronIcon({ open }: { open: boolean }) {
 export function DiagnosisAccordionPage({ data = mockDiagnosisData }: { data?: DiagnosisData }) {
   const [openIds, setOpenIds] = useState<Set<string>>(new Set());
 
+  const navigate = (item: ActionPathItem) => scrollToAnchor(item.targetId);
+
   const toggle = (id: string) => {
     setOpenIds((prev) => {
       const next = new Set(prev);
@@ -56,16 +50,6 @@ export function DiagnosisAccordionPage({ data = mockDiagnosisData }: { data?: Di
       else next.add(id);
       return next;
     });
-  };
-
-  const navigate = (item: ActionPathItem) => {
-    const sectionId = item.targetTab ? sectionIdByTab[item.targetTab] ?? item.targetTab : undefined;
-    if (sectionId && !openIds.has(sectionId)) {
-      setOpenIds((prev) => new Set(prev).add(sectionId));
-      window.setTimeout(() => scrollToAnchor(item.targetId), 70);
-      return;
-    }
-    scrollToAnchor(item.targetId);
   };
 
   const sections: SectionDef[] = [
@@ -121,67 +105,63 @@ export function DiagnosisAccordionPage({ data = mockDiagnosisData }: { data?: Di
   return (
     <ReportShell>
       <TopBar />
-      <SummaryHero data={data} rightLabel="아코디언형 · 선택 펼침" />
+      <SummaryHero data={data} rightLabel="아코디언형 · 선택 펼침" onNavigate={navigate} />
 
-      <main className="grid gap-5 bg-slate-50 px-[30px] pb-9 pt-6 lg:grid-cols-[1fr_280px]">
-        <div className="min-w-0">
-          <div className="mb-5 grid gap-3 lg:grid-cols-4">
-            {data.kpis.map((item) => (
-              <KpiCard key={item.id} item={item} onClick={(targetId) => scrollToAnchor(targetId)} />
-            ))}
-          </div>
-
-          <div className="mb-3 flex items-center justify-between">
-            <p className="text-sm font-black text-slate-500">항목을 눌러 상세 내용을 펼칩니다.</p>
-            <button
-              type="button"
-              onClick={() => setOpenIds(allOpen ? new Set() : new Set(sections.map((s) => s.id)))}
-              className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-black text-slate-600 transition hover:border-sky-300 hover:text-sky-600"
-            >
-              {allOpen ? '모두 접기' : '모두 펼치기'}
-            </button>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            {sections.map((section) => {
-              const isOpen = openIds.has(section.id);
-              return (
-                <div
-                  key={section.id}
-                  id={section.id}
-                  className={cn(
-                    'anchor-target overflow-hidden rounded-2xl border bg-white transition-shadow',
-                    isOpen ? 'border-sky-200 shadow-[0_4px_20px_rgba(18,151,245,0.10)]' : 'border-slate-200 shadow-card',
-                  )}
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggle(section.id)}
-                    className="flex w-full items-center gap-4 px-6 py-4 text-left transition hover:bg-slate-50/70"
-                  >
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-xl">{section.icon}</span>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-base font-black tracking-[-0.05em] text-slate-950">{section.label}</span>
-                        <StatusBadge tone={section.tone}>{section.status}</StatusBadge>
-                      </div>
-                      <p className="mt-0.5 truncate text-sm font-semibold text-slate-500">{section.headline}</p>
-                    </div>
-                    <ChevronIcon open={isOpen} />
-                  </button>
-
-                  {isOpen ? (
-                    <div className="border-t border-slate-100 p-3">
-                      {section.renderContent()}
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
+      <main className="bg-slate-50 px-[30px] pb-9 pt-6">
+        <div className="mb-5 grid gap-3 lg:grid-cols-4">
+          {data.kpis.map((item) => (
+            <KpiCard key={item.id} item={item} onClick={(targetId) => scrollToAnchor(targetId)} />
+          ))}
         </div>
 
-        <PriorityActionAside data={data} onNavigate={navigate} stickyTop={76} />
+        <div className="mb-3 flex items-center justify-between">
+          <p className="text-sm font-black text-slate-500">항목을 눌러 상세 내용을 펼칩니다.</p>
+          <button
+            type="button"
+            onClick={() => setOpenIds(allOpen ? new Set() : new Set(sections.map((s) => s.id)))}
+            className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-black text-slate-600 transition hover:border-sky-300 hover:text-sky-600"
+          >
+            {allOpen ? '모두 접기' : '모두 펼치기'}
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          {sections.map((section) => {
+            const isOpen = openIds.has(section.id);
+            return (
+              <div
+                key={section.id}
+                id={section.id}
+                className={cn(
+                  'anchor-target overflow-hidden rounded-2xl border bg-white transition-shadow',
+                  isOpen ? 'border-sky-200 shadow-[0_4px_20px_rgba(18,151,245,0.10)]' : 'border-slate-200 shadow-card',
+                )}
+              >
+                <button
+                  type="button"
+                  onClick={() => toggle(section.id)}
+                  className="flex w-full items-center gap-4 px-6 py-4 text-left transition hover:bg-slate-50/70"
+                >
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-xl">{section.icon}</span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-base font-black tracking-[-0.05em] text-slate-950">{section.label}</span>
+                      <StatusBadge tone={section.tone}>{section.status}</StatusBadge>
+                    </div>
+                    <p className="mt-0.5 truncate text-sm font-semibold text-slate-500">{section.headline}</p>
+                  </div>
+                  <ChevronIcon open={isOpen} />
+                </button>
+
+                {isOpen ? (
+                  <div className="border-t border-slate-100 p-3">
+                    {section.renderContent()}
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
       </main>
     </ReportShell>
   );

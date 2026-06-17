@@ -1,5 +1,6 @@
 export * from './types';
 export * from './data/mockDiagnosisData';
+export * from './pages/DiagnosisDashboardPage';
 export * from './pages/DiagnosisTabbedHybridPage';
 export * from './pages/DiagnosisLocReportPage';
 export * from './pages/DiagnosisLocReportStickySummaryPage';

@@ -6,7 +6,6 @@ import { ActionPathLinks } from './ActionPathLinks';
 type SummaryHeroProps = {
   data: DiagnosisData;
   rightLabel?: string;
-  showActionPath?: boolean;
   onNavigate?: (item: ActionPathItem) => void;
 };
 
@@ -33,7 +32,7 @@ function SummaryPointChip({ point }: { point: SummaryPoint }) {
   );
 }
 
-export function SummaryHero({ data, rightLabel, showActionPath = false, onNavigate }: SummaryHeroProps) {
+export function SummaryHero({ data, rightLabel, onNavigate }: SummaryHeroProps) {
   return (
     <section id="summary" className="anchor-target bg-gradient-to-b from-white to-sky-50/50 px-[30px] py-7">
       <div className="mb-4 flex items-center justify-between gap-4">
@@ -44,7 +43,7 @@ export function SummaryHero({ data, rightLabel, showActionPath = false, onNaviga
       </div>
 
       <div className="rounded-2xl border border-sky-200 bg-gradient-to-br from-white to-sky-50 p-5 shadow-[0_12px_28px_rgba(18,151,245,0.08)]">
-        <div className={cn('grid items-center gap-5', showActionPath ? 'lg:grid-cols-[76px_1fr_260px]' : 'lg:grid-cols-[76px_1fr]')}>
+        <div className="grid items-center gap-5 lg:grid-cols-[76px_1fr_260px]">
           <div className="mx-auto flex size-16 items-center justify-center rounded-[20px] bg-sky-100 text-3xl">🤖</div>
           <div>
             <h2 className="mb-2 text-[20px] font-black leading-snug tracking-[-0.055em]">
@@ -58,14 +57,12 @@ export function SummaryHero({ data, rightLabel, showActionPath = false, onNaviga
               ))}
             </div>
           </div>
-          {showActionPath ? (
-            <div className="flex h-full flex-col justify-center rounded-2xl border border-sky-100 bg-white p-4">
-              <b className="text-sm text-slate-600">우선 확인</b>
-              <div className="mt-2">
-                <ActionPathLinks items={data.summary.actionPath} compact onNavigate={onNavigate} />
-              </div>
+          <div className="flex h-full flex-col justify-center rounded-2xl border border-sky-100 bg-white p-4">
+            <b className="text-sm text-slate-600">우선 확인</b>
+            <div className="mt-2">
+              <ActionPathLinks items={data.summary.actionPath} compact onNavigate={onNavigate} />
             </div>
-          ) : null}
+          </div>
         </div>
       </div>
     </section>

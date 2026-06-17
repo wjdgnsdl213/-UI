@@ -7,7 +7,6 @@ import { TopBar } from '../layout/TopBar';
 import { SummaryHero } from '../summary/SummaryHero';
 import { StickySummaryBar } from '../summary/StickySummaryBar';
 import { LocNav, MobileLocNav } from '../navigation/LocNav';
-import { PriorityActionAside } from '../summary/PriorityActionAside';
 import { KpiCard } from '../ui/Cards';
 import { BarChart, ChartLegend } from '../ui/Charts';
 import { HelpBadge } from '../ui/Badges';
@@ -19,14 +18,14 @@ export function DiagnosisLocReportStickySummaryPage({ data = mockDiagnosisData, 
   return (
     <ReportShell className={cn('max-w-[1180px]', className)}>
       <TopBar />
-      <StickySummaryBar data={data} />
+      <StickySummaryBar data={data} onNavigate={navigate} />
       <MobileLocNav offset={STICKY_SUMMARY_SCROLL_OFFSET} />
-      <div className="grid bg-slate-50 lg:grid-cols-[220px_1fr_280px]">
+      <div className="grid bg-slate-50 lg:grid-cols-[220px_1fr]">
         <LocNav offset={STICKY_SUMMARY_SCROLL_OFFSET} />
 
         <main className="min-w-0">
           <section id="summary-section" className="bg-white">
-            <SummaryHero data={data} rightLabel="LOC 요약 고정형" />
+            <SummaryHero data={data} rightLabel="LOC 요약 고정형" onNavigate={navigate} />
             <div className="px-[30px] pb-8">
               <div className="grid gap-3 lg:grid-cols-4">
                 {data.kpis.map((item) => (
@@ -46,10 +45,6 @@ export function DiagnosisLocReportStickySummaryPage({ data = mockDiagnosisData, 
 
           <DiagnosisDetailSections data={data} />
         </main>
-
-        <div className="hidden bg-white p-4 lg:block">
-          <PriorityActionAside data={data} onNavigate={navigate} stickyTop={STICKY_SUMMARY_SCROLL_OFFSET} />
-        </div>
       </div>
     </ReportShell>
   );
