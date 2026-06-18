@@ -9,7 +9,7 @@
 - 탭 기반 상세 탐색 UI
 - 좌측 LOC(List of Contents) 내비게이션을 포함한 리포트형 UI
 - 상단 요약 고정 바를 포함한 리포트형 UI
-- `우선 확인` 항목 클릭 시 관련 지표로 이동하는 앵커 내비게이션
+- `다음 액션` 항목 클릭 시 관련 지표로 이동하는 앵커 내비게이션
 - 기준이 모호하지 않도록 `전월 대비`, `최근 6개월 평균 대비`, `경쟁권 기준`을 함께 노출하는 요약 문구 구조
 
 ## 화면 버전
@@ -42,7 +42,7 @@ src/
     navigation/    # LOC, 화면 버전 스위처
     pages/         # 화면 버전별 페이지 컴포넌트
     panels/        # 상세 진단 패널
-    summary/       # 요약 영역, 우선 확인 링크, 우선확인 보조 패널
+    summary/       # 요약 영역, 다음 액션 보조 패널
     ui/            # 카드, 차트, 뱃지 등 공통 UI
     utils/         # className 병합, 스크롤 유틸
     types.ts       # 경영진단 데이터 타입
@@ -81,12 +81,12 @@ export function Page({ data }: { data: DiagnosisData }) {
 }
 ```
 
-`summary.actionPath[].targetId`와 상세 지표 컴포넌트의 `targetId`를 맞추면 `우선 확인` 클릭 이동 기능이 그대로 동작합니다.
+`summary.actionPath[].targetId`와 상세 지표 컴포넌트의 `targetId`를 맞추면 `다음 액션` 클릭 이동 기능이 그대로 동작합니다.
 
 ## 유지보수 포인트
 
 - 샘플 데이터와 요약 문구: `src/components/data/mockDiagnosisData.ts`
-- 우선 확인 링크 UI: `src/components/summary/ActionPathLinks.tsx`
+- 다음 액션 보조 패널: `src/components/summary/PriorityActionAside.tsx`
 - LOC 내비게이션: `src/components/navigation/LocNav.tsx`
 - 스크롤 위치 보정: `src/components/utils/scroll.ts`
 - 화면별 레이아웃: `src/components/pages/`

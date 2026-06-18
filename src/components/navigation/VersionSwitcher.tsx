@@ -5,7 +5,7 @@ export type LayoutKey = 'tabbed' | 'loc' | 'loc-sticky-summary' | 'accordion';
 export const layoutOptions: Array<{ key: LayoutKey; label: string; description: string }> = [
   { key: 'tabbed', label: '1. 탭형 하이브리드', description: '요약 우선 + 선택 상세' },
   { key: 'loc', label: '2. LOC 기본형', description: '요약 비고정 + 목차 이동' },
-  { key: 'loc-sticky-summary', label: '3. LOC 요약 고정형', description: '요약/우선 확인 고정' },
+  { key: 'loc-sticky-summary', label: '3. LOC 요약 고정형', description: '요약/다음 액션 고정' },
   { key: 'accordion', label: '4. 아코디언형', description: '전체 현황 스캔 + 선택 펼침' },
 ];
 

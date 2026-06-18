@@ -48,7 +48,7 @@ export function LocNav({ items = defaultLocItems, offset = 104, footer }: { item
       {footer ?? (
         <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50 p-4">
           <div className="text-xs font-black text-slate-500">사용 팁</div>
-          <p className="mt-3 text-xs font-bold leading-5 text-slate-500">목차 또는 우선 확인 항목을 누르면 해당 지표로 이동합니다.</p>
+          <p className="mt-3 text-xs font-bold leading-5 text-slate-500">목차 또는 다음 액션 항목을 누르면 해당 지표로 이동합니다.</p>
         </div>
       )}
     </aside>

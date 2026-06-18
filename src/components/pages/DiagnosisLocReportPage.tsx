@@ -1,4 +1,4 @@
-import type { ActionPathItem, DiagnosisData } from '../types';
+import type { DiagnosisData } from '../types';
 import { mockDiagnosisData } from '../data/mockDiagnosisData';
 import { scrollToAnchor } from '../utils/scroll';
 import { cn } from '../utils/cn';
@@ -12,8 +12,6 @@ import { HelpBadge } from '../ui/Badges';
 import { DiagnosisDetailSections } from './ReportSections';
 
 export function DiagnosisLocReportPage({ data = mockDiagnosisData, className }: { data?: DiagnosisData; className?: string }) {
-  const navigate = (item: ActionPathItem) => scrollToAnchor(item.targetId);
-
   return (
     <ReportShell className={cn('max-w-[1180px]', className)}>
       <TopBar />
@@ -23,7 +21,7 @@ export function DiagnosisLocReportPage({ data = mockDiagnosisData, className }: 
 
         <main className="min-w-0">
           <section id="summary-section" className="bg-white">
-            <SummaryHero data={data} rightLabel="LOC 기본형 · 요약 비고정" showActionPath onNavigate={navigate} />
+            <SummaryHero data={data} rightLabel="LOC 기본형 · 요약 비고정" />
             <div className="px-[30px] pb-8">
               <div className="grid gap-3 lg:grid-cols-4">
                 {data.kpis.map((item) => (
