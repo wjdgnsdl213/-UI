@@ -6,7 +6,6 @@
 
 ## 주요 기능
 
-- 경영진단 요약, KPI, 차트, 상세 패널을 한 화면에서 확인하는 대시보드형 UI
 - 탭 기반 상세 탐색 UI
 - 좌측 LOC(List of Contents) 내비게이션을 포함한 리포트형 UI
 - 상단 요약 고정 바를 포함한 리포트형 UI
@@ -17,7 +16,6 @@
 
 | 버전 | 컴포넌트 | 설명 |
 | --- | --- | --- |
-| 대시보드형 | `DiagnosisDashboardPage` | 핵심 요약, KPI, 차트, 액션을 한 화면에 압축 |
 | 탭형 하이브리드 | `DiagnosisTabbedHybridPage` | 상단 요약과 탭으로 상세 정보 탐색 |
 | LOC 기본형 | `DiagnosisLocReportPage` | 기존 스크롤 구조에 좌측 LOC 내비게이션 추가 |
 | LOC 요약 고정형 | `DiagnosisLocReportStickySummaryPage` | 좌측 LOC와 상단 요약 바를 함께 고정 |
@@ -44,7 +42,7 @@ src/
     navigation/    # LOC, 화면 버전 스위처
     pages/         # 화면 버전별 페이지 컴포넌트
     panels/        # 상세 진단 패널
-    summary/       # 요약 영역과 우선 확인 링크
+    summary/       # 요약 영역, 우선 확인 링크, 우선확인 보조 패널
     ui/            # 카드, 차트, 뱃지 등 공통 UI
     utils/         # className 병합, 스크롤 유틸
     types.ts       # 경영진단 데이터 타입
