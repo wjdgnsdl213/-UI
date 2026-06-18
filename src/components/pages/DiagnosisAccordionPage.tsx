@@ -6,7 +6,6 @@ import { scrollToAnchor } from '../utils/scroll';
 import { ReportShell } from '../layout/ReportShell';
 import { TopBar } from '../layout/TopBar';
 import { SummaryHero } from '../summary/SummaryHero';
-import { KpiCard } from '../ui/Cards';
 import { StatusBadge } from '../ui/Badges';
 import { PriorityActionAside } from '../summary/PriorityActionAside';
 import { CategoryInsightPanel } from '../panels/CategoryInsightPanel';
@@ -125,12 +124,6 @@ export function DiagnosisAccordionPage({ data = mockDiagnosisData }: { data?: Di
 
       <main className="grid gap-5 bg-slate-50 px-[30px] pb-9 pt-6 lg:grid-cols-[1fr_280px]">
         <div className="min-w-0">
-          <div className="mb-5 grid gap-3 lg:grid-cols-4">
-            {data.kpis.map((item) => (
-              <KpiCard key={item.id} item={item} onClick={(targetId) => scrollToAnchor(targetId)} />
-            ))}
-          </div>
-
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-black text-slate-500">항목을 눌러 상세 내용을 펼칩니다.</p>
             <button

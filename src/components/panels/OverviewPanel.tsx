@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import type { ActionPathItem, DiagnosisData, TabKey } from '../types';
-import { scrollToAnchor } from '../utils/scroll';
-import { KpiCard } from '../ui/Cards';
 import { BarChart, ChartLegend } from '../ui/Charts';
 import { StatusBadge } from '../ui/Badges';
 import { cn } from '../utils/cn';
@@ -14,22 +12,8 @@ type OverviewPanelProps = {
 export function OverviewPanel({ data, onShortcut }: OverviewPanelProps) {
   const [showTrend, setShowTrend] = useState(false);
 
-  const handleKpiClick = (targetId: string) => {
-    if (onShortcut) {
-      onShortcut(targetId);
-      return;
-    }
-    scrollToAnchor(targetId);
-  };
-
   return (
     <div className="grid gap-4">
-      <section className="grid gap-2 lg:grid-cols-4">
-        {data.kpis.map((item) => (
-          <KpiCard key={item.id} item={item} compact onClick={handleKpiClick} />
-        ))}
-      </section>
-
       <section className="diagnosis-card p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -96,11 +80,12 @@ export function ActionList({ data, onNavigate }: { data: DiagnosisData; onNaviga
                 description: action.description,
               })
             }
-            className="flex w-full gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 text-left text-sm font-extrabold leading-6 text-slate-800 transition hover:bg-sky-50"
+            className="flex w-full gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 text-left transition hover:bg-sky-50"
           >
             <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-sky-500 text-xs font-black text-white">{index + 1}</span>
             <div>
-              <div>{action.title}</div>
+              <div className="text-sm font-extrabold leading-6 text-slate-800">{action.title}</div>
+              {action.description ? <p className="mt-0.5 text-xs font-semibold leading-5 text-slate-500">{action.description}</p> : null}
             </div>
           </button>
         </li>

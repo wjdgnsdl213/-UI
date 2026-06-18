@@ -53,7 +53,7 @@ export function StickySummaryBar({ data, showPoints = false, sticky = true, clas
   return (
     <div className={cn(sticky && 'sticky top-[60px]', 'z-40 border-b border-slate-200 bg-white/95 px-[30px] py-2.5 shadow-[0_10px_24px_rgba(15,23,42,0.05)] backdrop-blur', className)}>
       <div className="flex items-center gap-3">
-        <StatusBadge tone="warning">요약 고정</StatusBadge>
+        <StatusBadge tone="warning">요약</StatusBadge>
         <span className="text-xs font-bold text-slate-500">{data.reportDate}</span>
         <h2 className="min-w-0 truncate text-[15px] font-black tracking-[-0.05em] text-slate-950">{data.summary.title}</h2>
       </div>

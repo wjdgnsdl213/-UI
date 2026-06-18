@@ -81,7 +81,7 @@ export function Page({ data }: { data: DiagnosisData }) {
 }
 ```
 
-`summary.actionPath[].targetId`와 상세 지표 컴포넌트의 `targetId`를 맞추면 `다음 액션` 클릭 이동 기능이 그대로 동작합니다.
+`actions[].targetId`와 상세 지표 컴포넌트의 `targetId`를 맞추면 `다음 액션` 클릭 이동 기능이 그대로 동작합니다.
 
 ## 유지보수 포인트
 

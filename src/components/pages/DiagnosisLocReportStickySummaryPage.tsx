@@ -8,7 +8,6 @@ import { SummaryHero } from '../summary/SummaryHero';
 import { StickySummaryBar } from '../summary/StickySummaryBar';
 import { LocNav, MobileLocNav } from '../navigation/LocNav';
 import { PriorityActionAside } from '../summary/PriorityActionAside';
-import { KpiCard } from '../ui/Cards';
 import { BarChart, ChartLegend } from '../ui/Charts';
 import { HelpBadge } from '../ui/Badges';
 import { DiagnosisDetailSections } from './ReportSections';
@@ -28,12 +27,7 @@ export function DiagnosisLocReportStickySummaryPage({ data = mockDiagnosisData, 
           <section id="summary-section" className="bg-white">
             <SummaryHero data={data} rightLabel="LOC 요약 고정형" />
             <div className="px-[30px] pb-8">
-              <div className="grid gap-3 lg:grid-cols-4">
-                {data.kpis.map((item) => (
-                  <KpiCard key={item.id} item={item} onClick={(targetId) => scrollToAnchor(targetId, STICKY_SUMMARY_SCROLL_OFFSET)} />
-                ))}
-              </div>
-              <div className="mt-5 rounded-[24px] border border-slate-200 bg-white p-6 shadow-card">
+              <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-card">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-lg font-black tracking-[-0.05em]">핵심 매출 추이</h2>
                   <span className="inline-flex items-center gap-1 text-xs font-black text-slate-500">최근 6개월 <HelpBadge /></span>

@@ -37,7 +37,6 @@ export interface DiagnosisSummary {
   description: string;
   basisNote: string;
   points: SummaryPoint[];
-  actionPath: ActionPathItem[];
 }
 
 export interface StatItem {
@@ -114,7 +113,6 @@ export interface DiagnosisData {
   storeName: string;
   reportDate: string;
   summary: DiagnosisSummary;
-  kpis: StatItem[];
   salesSeries: ChartPoint[];
   marketSalesSeries: ChartPoint[];
   shareSeries: ChartPoint[];

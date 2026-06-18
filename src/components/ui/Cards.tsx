@@ -1,45 +1,6 @@
-import type { StatItem, Tone } from '../types';
+import type { StatItem } from '../types';
 import { cn } from '../utils/cn';
 import { toneTextClass } from './Badges';
-
-const kpiSurfaceClass: Record<Tone, string> = {
-  positive: 'border-blue-200 bg-blue-50/80',
-  negative: 'border-rose-200 bg-rose-50/80',
-  warning: 'border-amber-200 bg-amber-50/70',
-  info: 'border-sky-100 bg-sky-50/80',
-  neutral: 'border-slate-200 bg-white',
-};
-
-export function KpiCard({ item, onClick, compact = false }: { item: StatItem; onClick?: (targetId: string) => void; compact?: boolean }) {
-  const textClass = item.trend === 'down' ? 'text-rose-500' : item.trend === 'up' ? 'text-blue-600' : 'text-slate-500';
-  const clickable = Boolean(item.targetId && onClick);
-  const visualTone: Tone = item.trend === 'up' ? 'positive' : item.trend === 'down' ? 'negative' : item.tone ?? 'neutral';
-
-  return (
-    <button
-      id={item.targetId}
-      type="button"
-      disabled={!clickable}
-      onClick={() => item.targetId && onClick?.(item.targetId)}
-      className={cn(
-        'anchor-target rounded-lg border text-left shadow-card transition',
-        kpiSurfaceClass[visualTone],
-        compact ? 'min-h-[112px] p-4' : 'min-h-[148px] p-[18px]',
-        clickable && 'cursor-pointer hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-soft',
-        !clickable && 'cursor-default',
-      )}
-    >
-      <div className="mb-3 text-sm font-extrabold text-slate-700">{item.label}</div>
-      <div className={cn('font-black leading-none tracking-[-0.05em]', compact ? 'text-[28px]' : 'text-[34px]')}>
-        {item.value}
-        {item.unit ? <span className="ml-1 text-base font-black">{item.unit}</span> : null}
-      </div>
-      {item.changeText ? <div className={cn('mt-3 text-sm font-black', textClass)}>{item.changeText}</div> : null}
-      {item.helperText ? <div className="mt-1 truncate text-xs font-bold text-slate-500">{item.helperText}</div> : null}
-      {!compact && item.basisText ? <div className="mt-2 rounded-lg bg-white/70 px-3 py-2 text-[11px] font-bold leading-4 text-slate-500">기준: {item.basisText}</div> : null}
-    </button>
-  );
-}
 
 export function MetricRow({ item, onClick }: { item: StatItem; onClick?: (targetId: string) => void }) {
   const valueClass = item.trend === 'down' ? 'text-rose-500' : item.trend === 'up' ? 'text-blue-600' : 'text-slate-700';
