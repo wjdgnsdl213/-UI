@@ -14,6 +14,10 @@ export function MarketSalesPanel({ data }: { data: DiagnosisData }) {
         <SmallStat label="업종 평균 매출" value="41백만원" change="전월 대비 +26.3%" tone="positive" />
       </div>
       <div className="mt-6 rounded-2xl border border-slate-100 bg-white p-4">
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-sm font-black tracking-[-0.03em] text-slate-900">지역 전체업종 매출 · 최근 6개월</h3>
+          <span className="text-xs font-black text-slate-500">단위: 백만원</span>
+        </div>
         <LineChart series={data.marketSalesSeries} height={230} />
         <ChartLegend first="평균매출액" second="내 가게 매출" />
       </div>

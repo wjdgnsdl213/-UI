@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ActionPathItem, DiagnosisData, TabKey } from '../types';
 import { BarChart, ChartLegend } from '../ui/Charts';
 import { StatusBadge } from '../ui/Badges';
+import { StatusGuide } from '../ui/StatusGuide';
 import { cn } from '../utils/cn';
 
 type OverviewPanelProps = {
@@ -49,11 +50,13 @@ export function OverviewPanel({ data, onShortcut }: OverviewPanelProps) {
           ))}
         </div>
 
+        <StatusGuide className="mt-4" />
+
         {showTrend ? (
           <div className="mt-4 border-t border-slate-100 pt-4">
             <div className="mb-2 flex items-center justify-between">
-              <h3 className="text-base font-black tracking-[-0.04em]">매출 추이</h3>
-              <StatusBadge tone="info">최근 6개월</StatusBadge>
+              <h3 className="text-base font-black tracking-[-0.04em]">매출 추이 · 최근 6개월</h3>
+              <span className="text-xs font-black text-slate-500">단위: 백만원</span>
             </div>
             <BarChart series={data.salesSeries} height={160} />
             <ChartLegend first="매출액" second="증감률" />

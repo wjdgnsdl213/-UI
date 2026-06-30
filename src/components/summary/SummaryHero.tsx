@@ -1,6 +1,7 @@
 import type { DiagnosisData, SummaryPoint } from '../types';
 import { cn } from '../utils/cn';
 import { HelpBadge, toneBadgeClass } from '../ui/Badges';
+import { StatusGuide } from '../ui/StatusGuide';
 
 type SummaryHeroProps = {
   data: DiagnosisData;
@@ -56,6 +57,7 @@ export function SummaryHero({ data, rightLabel }: SummaryHeroProps) {
             </div>
           </div>
         </div>
+        <StatusGuide className="mt-4" />
       </div>
     </section>
   );

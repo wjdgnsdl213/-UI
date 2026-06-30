@@ -9,7 +9,6 @@ import { StickySummaryBar } from '../summary/StickySummaryBar';
 import { LocNav, MobileLocNav } from '../navigation/LocNav';
 import { PriorityActionAside } from '../summary/PriorityActionAside';
 import { BarChart, ChartLegend } from '../ui/Charts';
-import { HelpBadge } from '../ui/Badges';
 import { DiagnosisDetailSections } from './ReportSections';
 
 export function DiagnosisLocReportStickySummaryPage({ data = mockDiagnosisData, className }: { data?: DiagnosisData; className?: string }) {
@@ -29,8 +28,8 @@ export function DiagnosisLocReportStickySummaryPage({ data = mockDiagnosisData, 
             <div className="px-[30px] pb-8">
               <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-card">
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-black tracking-[-0.05em]">핵심 매출 추이</h2>
-                  <span className="inline-flex items-center gap-1 text-xs font-black text-slate-500">최근 6개월 <HelpBadge /></span>
+                  <h2 className="text-lg font-black tracking-[-0.05em]">핵심 매출 추이 · 최근 6개월</h2>
+                  <span className="text-xs font-black text-slate-500">단위: 백만원</span>
                 </div>
                 <BarChart series={data.salesSeries} />
                 <ChartLegend first="매출액" second="증감률" />

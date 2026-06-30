@@ -1,5 +1,6 @@
 export type Tone = 'positive' | 'negative' | 'neutral' | 'warning' | 'info';
 export type Trend = 'up' | 'down' | 'flat';
+export type DiagnosisStatus = '위험' | '주의' | '보통' | '양호' | '우수';
 
 export type TabKey =
   | 'overview'
@@ -62,7 +63,7 @@ export interface DiagnosisCategory {
   id: 'competitiveness' | 'survival' | 'growth' | 'interest';
   label: string;
   icon: string;
-  status: string;
+  status: DiagnosisStatus;
   tone: Tone;
   headline: string;
   description: string;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { DiagnosisCategory, DiagnosisData, Tone, Trend } from '../types';
 import { BarChart, ChartLegend } from '../ui/Charts';
-import { StatusBadge, toneTextClass } from '../ui/Badges';
+import { toneTextClass } from '../ui/Badges';
 import { cn } from '../utils/cn';
 
 const metricSurfaceClass: Record<NonNullable<DiagnosisCategory['metrics'][number]['tone']>, string> = {
@@ -20,29 +20,18 @@ function getMetricTone(tone?: Tone, trend?: Trend): Tone {
 
 export function CategoryInsightPanel({ data, category }: { data: DiagnosisData; category: DiagnosisCategory }) {
   const [selectedMetricId, setSelectedMetricId] = useState<string | null>(null);
-  const chartConfig: Record<DiagnosisCategory['id'], { title: string; series: DiagnosisData['salesSeries']; variant: 'blue' | 'purple' | 'deepBlue'; legend: string }> = {
-    competitiveness: { title: '매출 추이 · 최근 6개월', series: data.salesSeries, variant: 'blue', legend: '매출액' },
-    survival: { title: '경쟁권 매출건수 흐름', series: data.visitSeries.map((p) => ({ ...p, value: p.value / 10 })), variant: 'deepBlue', legend: '매출건수' },
-    growth: { title: '지역 전체업종 매출 · 최근 6개월', series: data.marketSalesSeries, variant: 'purple', legend: '지역 매출' },
-    interest: { title: '결제건수 · 최근 6개월', series: data.visitSeries.map((p) => ({ ...p, value: p.value / 10 })), variant: 'blue', legend: '결제건수' },
+  const chartConfig: Record<DiagnosisCategory['id'], { title: string; series: DiagnosisData['salesSeries']; variant: 'blue' | 'purple' | 'deepBlue'; legend: string; unit: string }> = {
+    competitiveness: { title: '매출 추이 · 최근 6개월', series: data.salesSeries, variant: 'blue', legend: '매출액', unit: '백만원' },
+    survival: { title: '경쟁권 매출건수 흐름 · 최근 6개월', series: data.visitSeries, variant: 'deepBlue', legend: '매출건수', unit: '건' },
+    growth: { title: '지역 전체업종 매출 · 최근 6개월', series: data.marketSalesSeries, variant: 'purple', legend: '지역 매출', unit: '백만원' },
+    interest: { title: '결제건수 · 최근 6개월', series: data.visitSeries, variant: 'blue', legend: '결제건수', unit: '건' },
   };
   const chart = chartConfig[category.id];
   const selectedMetric = category.metrics.find((metric) => metric.id === selectedMetricId) ?? null;
 
   return (
     <article className="diagnosis-card p-5">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <div className="mb-2 flex items-center gap-3">
-            <span className="flex size-10 items-center justify-center rounded-lg bg-sky-50 text-xl">{category.icon}</span>
-            <StatusBadge tone={category.tone}>{category.status}</StatusBadge>
-          </div>
-          <h2 className="text-[24px] font-black tracking-[-0.05em] text-slate-950">{category.label}</h2>
-        </div>
-        <div className="rounded-lg border border-slate-100 bg-slate-50 px-4 py-3 text-sm font-extrabold leading-5 text-slate-700 lg:max-w-[360px]">
-          {category.headline}
-        </div>
-      </div>
+      <h2 className="text-[24px] font-black tracking-[-0.05em] text-slate-950">{category.label}</h2>
 
       <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
         {category.metrics.map((metric) => {
@@ -58,17 +47,19 @@ export function CategoryInsightPanel({ data, category }: { data: DiagnosisData; 
               type="button"
               onClick={() => setSelectedMetricId(selected ? null : metric.id)}
               className={cn(
-                'anchor-target min-h-[108px] rounded-lg border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-card focus:outline-none focus:ring-2 focus:ring-sky-300',
+                'anchor-target grid min-h-[108px] grid-cols-[minmax(0,1fr)_auto] items-start gap-3 rounded-lg border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-card focus:outline-none focus:ring-2 focus:ring-sky-300',
                 surfaceClass,
                 selected && 'ring-2 ring-sky-300',
               )}
             >
-              <span className="block text-xs font-extrabold text-slate-600">{metric.label}</span>
-              <span className="mt-2 block text-[26px] font-black leading-none tracking-[-0.04em] text-slate-950">
-                {metric.value}
-                {metric.unit ? <span className="ml-1 text-sm font-black">{metric.unit}</span> : null}
+              <span className="min-w-0">
+                <span className="block text-xs font-extrabold text-slate-600">{metric.label}</span>
+                <span className="mt-2 block text-[26px] font-black leading-none tracking-[-0.04em] text-slate-950">
+                  {metric.value}
+                  {metric.unit ? <span className="ml-1 text-sm font-black">{metric.unit}</span> : null}
+                </span>
               </span>
-              {metric.changeText ? <span className={cn('mt-2 block text-xs font-black', valueClass)}>{metric.changeText}</span> : null}
+              {metric.changeText ? <span className={cn('whitespace-nowrap rounded-full bg-white/80 px-2.5 py-1 text-right text-xs font-black shadow-sm', valueClass)}>{metric.changeText}</span> : null}
             </button>
           );
         })}
@@ -84,7 +75,7 @@ export function CategoryInsightPanel({ data, category }: { data: DiagnosisData; 
           <div className="rounded-lg bg-white">
             <div className="mb-1 flex items-center justify-between">
               <h3 className="text-sm font-black tracking-[-0.03em] text-slate-900">{chart.title}</h3>
-              <span className="text-xs font-bold text-slate-500">최근 6개월</span>
+              <span className="text-xs font-bold text-slate-500">단위: {chart.unit}</span>
             </div>
             <BarChart series={chart.series} variant={chart.variant} height={150} />
             <ChartLegend first={chart.legend} second="증감률" />
